@@ -4,6 +4,8 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const PalSchema = require("./models/pal.model");
 const jwt = require("jsonwebtoken");
+const serverless = require("serverless-http");
+// const router = express.Router();
 // const config = require("./config");
 
 // const { username, password, host, dbName, options } = config.mongo;
@@ -46,7 +48,7 @@ mongoose
   });
 
 // Greet
-app.get("/hello", (req, res) => {
+app.get("/api/hello", (req, res) => {
   res.send("KRISHNA KANT HATI");
 });
 
@@ -97,3 +99,7 @@ app.get("/api/pal/count", async (req, res) => {
 app.listen(1337, () => {
   console.log("Server Started on 1337");
 });
+
+// Deploy on Netlify
+// app.use("/.netlify/functions/api", router);
+// module.exports.handler = serverless(app);
