@@ -4,14 +4,33 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const PalSchema = require("./models/pal.model");
 const jwt = require("jsonwebtoken");
-const config = require("./config");
+// const config = require("./config");
 
-const { username, password, host, dbName, options } = config.mongo;
+// const { username, password, host, dbName, options } = config.mongo;
+
+const fs = require("fs");
+const path = require("path");
+
+// Load environment variables from .env file
+const envPath = path.resolve(__dirname, ".env");
+const envContent = fs.readFileSync(envPath, "utf8");
+const envLines = envContent.split("\n");
+
+envLines.forEach((line) => {
+  const [key, value] = line.split("=");
+  process.env[key] = value;
+});
+
+const username = process.env.MONGO_USERNAME;
+const password = process.env.MONGO_PASSWORD;
+const dbName = process.env.MONGO_DBNAME;
+const options = process.env.MONGO_OPTIONS;
+const secretKey = process.env.SECRET_KEY;
 
 app.use(cors());
 app.use(express.json());
 
-const connectionString = `mongodb+srv://${username}:${password}@${host}/${dbName}?${options}`;
+const connectionString = `mongodb+srv://${username}:${password}@cluster0.5zcxwtg.mongodb.net/${dbName}?${options}`;
 
 // Connect to MongoDB
 mongoose
@@ -57,7 +76,7 @@ app.post("/api/login", async (req, res) => {
   });
 
   if (pal) {
-    const token = jwt.sign({ palid: pal.palid }, config.secretKey);
+    const token = jwt.sign({ palid: pal.palid }, secretKey);
     return res.json({ status: "green", pal: token });
   } else {
     return res.json({ status: "error", pal: false });
