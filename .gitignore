@@ -2,3 +2,5 @@ node_modules
 config.js
 generateSecretKey.js
 .env
+.gitignore
+dist/
