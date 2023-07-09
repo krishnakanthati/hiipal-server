@@ -2,10 +2,10 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const mongoose = require("mongoose");
-const PalSchema = require("./models/pal.model");
+const PalSchema = require("../models/pal.model");
 const jwt = require("jsonwebtoken");
 const serverless = require("serverless-http");
-// const router = express.Router();
+const router = express.Router();
 // const config = require("./config");
 
 // const { username, password, host, dbName, options } = config.mongo;
@@ -14,7 +14,7 @@ const fs = require("fs");
 const path = require("path");
 
 // Load environment variables from .env file
-const envPath = path.resolve(__dirname, ".env");
+const envPath = path.resolve(__dirname, "../.env");
 const envContent = fs.readFileSync(envPath, "utf8");
 const envLines = envContent.split("\n");
 
@@ -48,12 +48,12 @@ mongoose
   });
 
 // Greet
-app.get("/api/hello", (req, res) => {
-  res.send("KRISHNA KANT HATI");
+router.get("/", (req, res) => {
+  res.send("Hiipal Server is recheable. 🦏");
 });
 
 // Register
-app.post("/api/register", async (req, res) => {
+router.post("/api/register", async (req, res) => {
   console.log(req.body);
   try {
     await PalSchema.create({
@@ -71,7 +71,7 @@ app.post("/api/register", async (req, res) => {
 });
 
 // Login
-app.post("/api/login", async (req, res) => {
+router.post("/api/login", async (req, res) => {
   const pal = await PalSchema.findOne({
     palid: req.body.palid,
     password: req.body.password,
@@ -86,7 +86,7 @@ app.post("/api/login", async (req, res) => {
 });
 
 // Pal Registered Count
-app.get("/api/pal/count", async (req, res) => {
+router.get("/api/pal/count", async (req, res) => {
   try {
     const palRegisteredCount = await PalSchema.countDocuments();
     return res.json({ status: "green", count: palRegisteredCount });
@@ -96,10 +96,10 @@ app.get("/api/pal/count", async (req, res) => {
 });
 
 // Server Listening
-app.listen(1337, () => {
-  console.log("Server Started on 1337");
-});
+// app.listen(1337, () => {
+//   console.log("Server Started on 1337");
+// });
 
 // Deploy on Netlify
-// app.use("/.netlify/functions/api", router);
-// module.exports.handler = serverless(app);
+app.use("/", router);
+module.exports.handler = serverless(app);

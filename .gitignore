@@ -3,3 +3,5 @@ config.js
 generateSecretKey.js
 .env
 .gitignore
+# Local Netlify folder
+.netlify
