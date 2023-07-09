@@ -10,18 +10,18 @@ const router = express.Router();
 
 // const { username, password, host, dbName, options } = config.mongo;
 
-const fs = require("fs");
-const path = require("path");
+// const fs = require("fs");
+// const path = require("path");
 
 // Load environment variables from .env file
-const envPath = path.resolve(__dirname, "../.env");
-const envContent = fs.readFileSync(envPath, "utf8");
-const envLines = envContent.split("\n");
+// const envPath = path.resolve(__dirname, "../.env");
+// const envContent = fs.readFileSync(envPath, "utf8");
+// const envLines = envContent.split("\n");
 
-envLines.forEach((line) => {
-  const [key, value] = line.split("=");
-  process.env[key] = value;
-});
+// envLines.forEach((line) => {
+//   const [key, value] = line.split("=");
+//   process.env[key] = value;
+// });
 
 const username = process.env.MONGO_USERNAME;
 const password = process.env.MONGO_PASSWORD;
