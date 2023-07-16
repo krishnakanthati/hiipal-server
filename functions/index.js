@@ -95,6 +95,25 @@ router.get("/api/pal/count", async (req, res) => {
   }
 });
 
+router.post("/api/check-username", async (req, res) => {
+  console.log(req);
+  try {
+    const pal = await PalSchema.findOne({
+      palid: req.body.value,
+    });
+    if (pal) {
+      // Username exists
+      return res.json({ exists: true });
+    } else {
+      // Username does not exist
+      return res.json({ exists: false });
+    }
+  } catch (error) {
+    console.error("Error checking username availability:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 // Server Listening
 // app.listen(1337, () => {
 //   console.log("Server Started on 1337");
