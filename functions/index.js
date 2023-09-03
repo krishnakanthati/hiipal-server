@@ -6,6 +6,8 @@ const PalSchema = require("../models/pal.model");
 const jwt = require("jsonwebtoken");
 const serverless = require("serverless-http");
 const router = express.Router();
+const cookieParser = require("cookie-parser");
+
 // const config = require("./config");
 
 // const { username, password, host, dbName, options } = config.mongo;
@@ -30,6 +32,8 @@ const options = process.env.MONGO_OPTIONS;
 const secretKey = process.env.SECRET_KEY;
 
 app.use(cors());
+router.use(cors());
+router.use(cookieParser());
 app.use(express.json());
 
 const connectionString = `mongodb+srv://${username}:${password}@cluster0.5zcxwtg.mongodb.net/${dbName}?${options}`;
@@ -49,8 +53,48 @@ mongoose
 
 // Greet
 router.get("/", (req, res) => {
-  res.send("Hiipal Server is recheable. 🦏");
+  res.send("Hiipal Server is reachable 🦀");
 });
+
+// Test
+const profile = [
+  { name: "kris", id: 1 },
+  { name: "joe", id: 2 },
+];
+
+router.post("/post/test", (req, res) => {
+  const pal = { name: req.body.name };
+  // console.log(profile);
+  res.json({
+    status: "green",
+    token: jwt.sign(pal, secretKey),
+  });
+});
+
+router.get("/profile/:profileId", authenticateToken, async (req, res) => {
+  console.log("..........>>>>>>>>>>>>.", req.cookies);
+  const profileId = req.params.profileId;
+  try {
+    const filteredPals = await PalSchema.find({ palid: profileId });
+    res.json(filteredPals);
+  } catch (err) {
+    res.status(500).json({ error: "Error fetching data from the database" });
+  }
+});
+
+function authenticateToken(req, res, next) {
+  console.log(req.cookies);
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+
+  if (token == null) return res.sendStatus(401);
+
+  jwt.verify(token, secretKey, (err, pal) => {
+    if (err) return res.sendStatus(403);
+    req.pal = pal;
+    next();
+  });
+}
 
 // Register
 router.post("/api/register", async (req, res) => {
@@ -72,16 +116,18 @@ router.post("/api/register", async (req, res) => {
 
 // Login
 router.post("/api/login", async (req, res) => {
+  console.log(req.body);
   const pal = await PalSchema.findOne({
     palid: req.body.palid,
     password: req.body.password,
   });
 
   if (pal) {
-    const token = jwt.sign({ palid: pal.palid }, secretKey);
-    return res.json({ status: "green", pal: token });
+    const token = jwt.sign({ name: pal.palid }, secretKey, { expiresIn: "1h" });
+    res.cookie("jwt", token, { sameSite: "Lax", secure: true });
+    return res.json({ status: "green", token: token, pal: pal.palid });
   } else {
-    return res.json({ status: "error", pal: false });
+    return res.json({ status: "error", token: false });
   }
 });
 
@@ -95,6 +141,7 @@ router.get("/api/pal/count", async (req, res) => {
   }
 });
 
+// Check Existing Pal
 router.post("/api/check-username", async (req, res) => {
   console.log(req);
   try {
