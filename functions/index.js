@@ -116,7 +116,6 @@ router.post("/api/register", async (req, res) => {
 
 // Login
 router.post("/api/login", async (req, res) => {
-  console.log(req.body);
   const pal = await PalSchema.findOne({
     palid: req.body.palid,
     password: req.body.password,
@@ -124,6 +123,7 @@ router.post("/api/login", async (req, res) => {
 
   if (pal) {
     const token = jwt.sign({ name: pal.palid }, secretKey, { expiresIn: "1h" });
+    res.setHeader("Referrer-Policy", "no-referrer");
     res.cookie("jwt", token, { secure: true, httpOnly: true });
     return res.json({ status: "green", token: token, pal: pal.palid });
   } else {
