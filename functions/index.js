@@ -124,7 +124,7 @@ router.post("/api/login", async (req, res) => {
 
   if (pal) {
     const token = jwt.sign({ name: pal.palid }, secretKey, { expiresIn: "1h" });
-    res.cookie("jwt", token, { sameSite: "Lax", secure: true });
+    res.cookie("jwt", token, { sameSite: "None", secure: true });
     return res.json({ status: "green", token: token, pal: pal.palid });
   } else {
     return res.json({ status: "error", token: false });
