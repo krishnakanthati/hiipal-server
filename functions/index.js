@@ -127,7 +127,6 @@ router.post("/api/login", async (req, res) => {
     res.cookie("jwt", token, {
       secure: true,
       httpOnly: true,
-      sameSite: "none",
     });
     return res.json({ status: "green", token: token, pal: pal.palid });
   } else {
