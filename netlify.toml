@@ -5,3 +5,8 @@
     to="/.netlify/functions/index/:splat"
     from="/*"
     status=200
+
+[[headers]]
+  for = "/*"  # This applies the header to all URLs
+  [headers.values]
+    Access-Control-Allow-Origin = "https://hiipal.com"
