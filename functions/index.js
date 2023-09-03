@@ -83,10 +83,11 @@ router.get("/profile/:profileId", authenticateToken, async (req, res) => {
 });
 
 function authenticateToken(req, res, next) {
-  console.log(req.cookies);
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
-  // token = req.cookies;
+  // console.log(req.cookies);
+  // const authHeader = req.headers["authorization"];
+  // const token = authHeader && authHeader.split(" ")[1];
+  token = req.cookies["jwt"];
+  // console.log("tokd", token);
 
   if (token == null) return res.sendStatus(401);
 
