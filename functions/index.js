@@ -84,9 +84,9 @@ router.get("/profile/:profileId", authenticateToken, async (req, res) => {
 
 function authenticateToken(req, res, next) {
   // console.log(req.cookies);
-  // const authHeader = req.headers["authorization"];
-  // const token = authHeader && authHeader.split(" ")[1];
-  const token = String(req.cookies["jwt"]);
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+  // const token = String(req.cookies["jwt"]);
 
   if (token == null) return res.sendStatus(401);
 
