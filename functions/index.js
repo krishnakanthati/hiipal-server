@@ -72,7 +72,7 @@ router.post("/post/test", (req, res) => {
 });
 
 router.get("/profile/:profileId", authenticateToken, async (req, res) => {
-  console.log("..........>>>>>>>>>>>>.", req.cookies);
+  // console.log("..........>>>>>>>>>>>>.", req.cookies);
   const profileId = req.params.profileId;
   try {
     const filteredPals = await PalSchema.find({ palid: profileId });
@@ -84,8 +84,9 @@ router.get("/profile/:profileId", authenticateToken, async (req, res) => {
 
 function authenticateToken(req, res, next) {
   console.log(req.cookies);
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
+  // const authHeader = req.headers["authorization"];
+  // const token = authHeader && authHeader.split(" ")[1];
+  token = req.cookies;
 
   if (token == null) return res.sendStatus(401);
 
