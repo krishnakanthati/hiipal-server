@@ -28,14 +28,14 @@ const cookieParser = require("cookie-parser");
 router.use(
   cors({
     credentials: true,
-    origin: "https://hiipal.com",
+    origin: ["http://localhost:5173", "https://hiipal.com"],
   })
 );
 
 app.use(
   cors({
     credentials: true,
-    origin: "https://hiipal.com",
+    origin: ["http://localhost:5173", "https://hiipal.com"],
   })
 );
 
@@ -85,7 +85,7 @@ router.post("/post/test", (req, res) => {
 
 router.get("/profile/:profileId", authenticateToken, async (req, res) => {
   // console.log("..........>>>>>>>>>>>>.", req.cookies);
-  res.header("Access-Control-Allow-Origin", "https://hiipal.com");
+  // res.header("Access-Control-Allow-Origin", "https://hiipal.com");
   const profileId = req.params.profileId;
   try {
     const filteredPals = await PalSchema.find({ palid: profileId });
@@ -130,7 +130,7 @@ router.post("/api/register", async (req, res) => {
 
 // Login
 router.post("/api/login", async (req, res) => {
-  res.header("Access-Control-Allow-Origin", "https://hiipal.com");
+  // res.header("Access-Control-Allow-Origin", "https://hiipal.com");
   const pal = await PalSchema.findOne({
     palid: req.body.palid,
     password: req.body.password,
