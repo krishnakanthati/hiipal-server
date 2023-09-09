@@ -130,7 +130,7 @@ router.post("/api/register", async (req, res) => {
 
 // Login
 router.post("/api/login", async (req, res) => {
-  res.header("Access-Control-Allow-Origin", "https://hiipal.com/");
+  res.header("Access-Control-Allow-Origin", "https://hiipal.com/api/login");
   const pal = await PalSchema.findOne({
     palid: req.body.palid,
     password: req.body.password,
