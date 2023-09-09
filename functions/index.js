@@ -39,6 +39,26 @@ app.use(
   })
 );
 
+app.use((req, res, next) => {
+  // Allow requests from 'https://hiipal.com'
+  res.setHeader("Access-Control-Allow-Origin", "https://hiipal.com");
+  // Other CORS headers and options as needed
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader("Access-Control-Allow-Credentials", "true"); // If needed
+  next();
+});
+
+router.use((req, res, next) => {
+  // Allow requests from 'https://hiipal.com'
+  res.setHeader("Access-Control-Allow-Origin", "https://hiipal.com");
+  // Other CORS headers and options as needed
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader("Access-Control-Allow-Credentials", "true"); // If needed
+  next();
+});
+
 const username = process.env.MONGO_USERNAME;
 const password = process.env.MONGO_PASSWORD;
 const dbName = process.env.MONGO_DBNAME;
