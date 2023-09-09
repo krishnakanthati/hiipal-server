@@ -85,7 +85,7 @@ router.post("/post/test", (req, res) => {
 
 router.get("/profile/:profileId", authenticateToken, async (req, res) => {
   // console.log("..........>>>>>>>>>>>>.", req.cookies);
-  res.header("Access-Control-Allow-Origin", "https://hiipal.com/");
+  res.header("Access-Control-Allow-Origin", "https://hiipal.com");
   const profileId = req.params.profileId;
   try {
     const filteredPals = await PalSchema.find({ palid: profileId });
@@ -130,7 +130,7 @@ router.post("/api/register", async (req, res) => {
 
 // Login
 router.post("/api/login", async (req, res) => {
-  res.header("Access-Control-Allow-Origin", "https://hiipal.com/api/login");
+  res.header("Access-Control-Allow-Origin", "https://hiipal.com");
   const pal = await PalSchema.findOne({
     palid: req.body.palid,
     password: req.body.password,
