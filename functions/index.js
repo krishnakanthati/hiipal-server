@@ -85,7 +85,7 @@ router.post("/post/test", (req, res) => {
 
 router.get("/profile/:profileId", authenticateToken, async (req, res) => {
   // console.log("..........>>>>>>>>>>>>.", req.cookies);
-  res.header("Access-Control-Allow-Origin", "http://localhost:5173");
+  // res.header("Access-Control-Allow-Origin", "http://localhost:5173");
   const profileId = req.params.profileId;
   try {
     const filteredPals = await PalSchema.find({ palid: profileId });
