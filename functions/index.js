@@ -25,14 +25,26 @@ const cookieParser = require("cookie-parser");
 //   process.env[key] = value;
 // });
 
+router.use(
+  cors({
+    credentials: true,
+    origin: ["http://localhost:5173", "https://hiipal.com"],
+  })
+);
+
+app.use(
+  cors({
+    credentials: true,
+    origin: ["http://localhost:5173", "https://hiipal.com"],
+  })
+);
+
 const username = process.env.MONGO_USERNAME;
 const password = process.env.MONGO_PASSWORD;
 const dbName = process.env.MONGO_DBNAME;
 const options = process.env.MONGO_OPTIONS;
 const secretKey = process.env.SECRET_KEY;
 
-app.use(cors());
-router.use(cors());
 router.use(cookieParser());
 app.use(express.json());
 
@@ -73,6 +85,7 @@ router.post("/post/test", (req, res) => {
 
 router.get("/profile/:profileId", authenticateToken, async (req, res) => {
   // console.log("..........>>>>>>>>>>>>.", req.cookies);
+  res.header("Access-Control-Allow-Origin", "http://localhost:5173");
   const profileId = req.params.profileId;
   try {
     const filteredPals = await PalSchema.find({ palid: profileId });
@@ -83,7 +96,7 @@ router.get("/profile/:profileId", authenticateToken, async (req, res) => {
 });
 
 function authenticateToken(req, res, next) {
-  // console.log(req.cookies);
+  console.log("MyCOOKIE", req.cookies);
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
   // const token = String(req.cookies["jwt"]);
@@ -117,6 +130,7 @@ router.post("/api/register", async (req, res) => {
 
 // Login
 router.post("/api/login", async (req, res) => {
+  // res.header("Access-Control-Allow-Origin", "http://localhost:5173");
   const pal = await PalSchema.findOne({
     palid: req.body.palid,
     password: req.body.password,
@@ -124,9 +138,10 @@ router.post("/api/login", async (req, res) => {
 
   if (pal) {
     const token = jwt.sign({ name: pal.palid }, secretKey, { expiresIn: "1h" });
-    res.cookie("jwt", token, {
+    res.cookie("HiipalAuth", token, {
       secure: true,
       httpOnly: true,
+      sameSite: "Strict",
     });
     return res.json({ status: "green", token: token, pal: pal.palid });
   } else {
