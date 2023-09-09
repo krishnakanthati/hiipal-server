@@ -28,14 +28,14 @@ const cookieParser = require("cookie-parser");
 router.use(
   cors({
     credentials: true,
-    origin: "https://hiipal.com/",
+    origin: "https://hiipal.com",
   })
 );
 
 app.use(
   cors({
     credentials: true,
-    origin: "https://hiipal.com/",
+    origin: "https://hiipal.com",
   })
 );
 
