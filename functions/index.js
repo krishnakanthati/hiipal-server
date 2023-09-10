@@ -142,7 +142,7 @@ router.post("/api/login", async (req, res) => {
 
   if (pal) {
     const token = jwt.sign({ name: pal.palid }, secretKey, {
-      expiresIn: "5s",
+      expiresIn: "59s",
     });
     res.cookie("HiipalAuth", token, {
       secure: true,
