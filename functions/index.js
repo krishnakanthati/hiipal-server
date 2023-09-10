@@ -84,8 +84,6 @@ router.post("/post/test", (req, res) => {
 });
 
 router.get("/profile/:profileId", authenticateToken, async (req, res) => {
-  // console.log("..........>>>>>>>>>>>>.", req.cookies);
-  // res.header("Access-Control-Allow-Origin", "https://hiipal.com");
   const profileId = req.params.profileId;
   try {
     const filteredPals = await PalSchema.find({ palid: profileId });
@@ -97,17 +95,23 @@ router.get("/profile/:profileId", authenticateToken, async (req, res) => {
 
 function authenticateToken(req, res, next) {
   console.log("MyCOOKIE", req.cookies);
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
+  // const authHeader = req.headers["authorization"];
+  // const token = authHeader && authHeader.split(" ")[1];
   // const token = String(req.cookies["jwt"]);
+  const token = req.cookies.HiipalAuth;
 
   if (token == null) return res.sendStatus(401);
 
-  jwt.verify(token, secretKey, (err, pal) => {
-    if (err) return res.sendStatus(403);
-    req.pal = pal;
-    next();
-  });
+  try {
+    jwt.verify(token, secretKey, (err, pal) => {
+      if (err) return res.sendStatus(403);
+      req.pal = pal;
+      next();
+    });
+  } catch (err) {
+    res.clearCookie("token");
+    return res.redirect("/");
+  }
 }
 
 // Register
@@ -137,16 +141,25 @@ router.post("/api/login", async (req, res) => {
   });
 
   if (pal) {
-    const token = jwt.sign({ name: pal.palid }, secretKey, { expiresIn: "1h" });
+    const token = jwt.sign({ name: pal.palid }, secretKey, {
+      expiresIn: "5s",
+    });
     res.cookie("HiipalAuth", token, {
       secure: true,
       httpOnly: true,
       sameSite: "none",
+      // signed: true,
+      // maxAge: 10,
     });
     return res.json({ status: "green", token: token, pal: pal.palid });
   } else {
     return res.json({ status: "error", token: false });
   }
+});
+
+router.post("/logout", (req, res) => {
+  res.clearCookie("HiipalAuth"); // Clear the authentication cookie
+  res.status(200).send("Logout successful");
 });
 
 // Pal Registered Count
