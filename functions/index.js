@@ -158,7 +158,7 @@ router.post("/api/login", async (req, res) => {
 });
 
 // Logout
-router.post("/logout", (req, res) => {
+router.post("/api/logout", (req, res) => {
   res.clearCookie("HiipalAuth"); // Clear the authentication cookie
   res.status(200).send("Logout successful");
 });
