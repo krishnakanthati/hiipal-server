@@ -159,7 +159,10 @@ router.post("/api/login", async (req, res) => {
 
 // Logout
 router.post("/api/logout", (req, res) => {
-  res.clearCookie("HiipalAuth");
+  res.clearCookie("HiipalAuth", {
+    sameSite: "None",
+    secure: true,
+  });
   res.status(200).send("Logout successful");
 });
 
