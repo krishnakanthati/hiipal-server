@@ -147,7 +147,7 @@ router.post("/api/login", async (req, res) => {
     res.cookie("HiipalAuth", token, {
       secure: true,
       httpOnly: true,
-      sameSite: "none",
+      sameSite: "None",
       // signed: true,
       // maxAge: 10,
     });
@@ -159,7 +159,7 @@ router.post("/api/login", async (req, res) => {
 
 // Logout
 router.post("/api/logout", (req, res) => {
-  res.clearCookie("HiipalAuth"); // Clear the authentication cookie
+  res.clearCookie("HiipalAuth");
   res.status(200).send("Logout successful");
 });
 
