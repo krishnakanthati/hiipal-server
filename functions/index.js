@@ -147,7 +147,7 @@ router.post("/api/login", async (req, res) => {
     res.cookie("HiipalAuth", token, {
       secure: true,
       httpOnly: true,
-      sameSite: "None",
+      sameSite: "Lax",
       // signed: true,
       // maxAge: 10,
     });
