@@ -196,6 +196,24 @@ router.post("/api/check-username", async (req, res) => {
   }
 });
 
+const authMiddleware = (req, res, next) => {
+  if (req.cookies && req.cookies.token) {
+    const token = req.cookies.token;
+    jwt.verify(token, secretKey, (err, decoded) => {
+      if (err) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+      return next();
+    });
+  } else {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+};
+
+router.get("/api/check-auth", authMiddleware, (req, res) => {
+  res.json({ isAuthenticated: true });
+});
+
 // Server Listening
 // app.listen(1337, () => {
 //   console.log("Server Started on 1337");
