@@ -65,7 +65,7 @@ mongoose
 
 // Greet
 router.get("/", (req, res) => {
-  res.send("Hiipal Server is reachable 🦀");
+  res.send("Hiipal Server is reachable 🪸");
 });
 
 // Test
@@ -197,12 +197,15 @@ router.post("/api/check-username", async (req, res) => {
 });
 
 const authMiddleware = (req, res, next) => {
-  if (req.cookies && req.cookies.token) {
-    const token = req.cookies.token;
-    jwt.verify(token, secretKey, (err, decoded) => {
+  console.log("cookies", req.cookies);
+  if (req.cookies && req.cookies.HiipalAuth) {
+    const token = req.cookies.HiipalAuth;
+    console.log(".....................", req.cookies);
+    jwt.verify(token, secretKey, (err, pal) => {
       if (err) {
         return res.status(401).json({ message: "Unauthorized" });
       }
+      console.log(token);
       return next();
     });
   } else {
