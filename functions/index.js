@@ -149,7 +149,7 @@ router.post("/api/login", async (req, res) => {
       httpOnly: true,
       sameSite: "None",
       // signed: true,
-      // maxAge: 10,
+      maxAge: 1 * 60 * 60 * 1000,
     });
     return res.json({ status: "green", token: token, pal: pal.palid });
   } else {
